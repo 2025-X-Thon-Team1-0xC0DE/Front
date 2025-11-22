@@ -1,15 +1,44 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
+import { login } from '../api/auth.js';
 
 function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 로그인 로직 구현
-    console.log('Login attempt:', { id, password });
+    setError('');
+
+    // 입력값 검증
+    if (!id || !password) {
+      setError('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await login({
+        loginId: id,
+        password: password,
+      });
+
+      if (response.success) {
+        alert('로그인에 성공했습니다!');
+        navigate('/main');
+      } else {
+        setError(response.error || '로그인에 실패했습니다.');
+      }
+    } catch (err) {
+      setError(err.message || '로그인 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,8 +84,18 @@ function Login() {
                 />
               </div>
 
-              <button type="submit" className="auth-button">
-                LogIn
+              {error && (
+                <div className="error-message" style={{ marginTop: '0.5rem' }}>
+                  {error}
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                className="auth-button"
+                disabled={isLoading}
+              >
+                {isLoading ? '처리 중...' : 'LogIn'}
               </button>
             </form>
             <div className="auth-link">
