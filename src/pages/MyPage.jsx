@@ -55,10 +55,40 @@ const MyPage = () => {
   const handleDocumentClick = async (documentId) => {
     try {
       // 백엔드에 글 작성 요청 (기존 글 불러오기)
-      const documentData = await getDocument(documentId);
+      const response = await getDocument(documentId);
       
-      // 글 작성 화면으로 이동 (state로 데이터 전달)
-      navigate('/writing', { state: documentData });
+      // API 응답 구조에 따라 데이터 추출
+      // 응답이 { success: true, data: {...}, error: null } 형태일 수 있음
+      let documentData;
+      if (response.success && response.data) {
+        // ResponseDTO 형태: { success: true, data: {...}, error: null }
+        documentData = response.data;
+      } else if (response.data) {
+        // data 필드가 있는 경우
+        documentData = response.data;
+      } else {
+        // 직접 데이터인 경우
+        documentData = response;
+      }
+      
+      // documentId가 doc_id로 올 수 있으므로 처리
+      if (!documentData.documentId && documentData.doc_id) {
+        documentData.documentId = documentData.doc_id;
+      }
+      
+      // 글 작성 화면으로 이동 (DB에서 받아온 모든 데이터를 state로 전달)
+      navigate('/writing', { 
+        state: {
+          ...documentData, // DB에서 받아온 모든 데이터 전달
+          // 필수 필드들 명시적으로 포함
+          documentId: documentData.documentId || documentData.doc_id || documentId,
+          title: documentData.title || '',
+          content: documentData.content || '',
+          category: documentData.category || '',
+          keywords: documentData.keywords || [],
+          topicDescription: documentData.topicDescription || documentData.description || '',
+        }
+      });
     } catch (err) {
       console.error('글 불러오기 오류:', err);
       alert('글을 불러오는데 실패했습니다.');
