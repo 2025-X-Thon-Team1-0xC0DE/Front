@@ -1,9 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './WritingPage.css';
+import '../components/Background.css';
 
-const WritingPage = ({ documentType = 'Essay' }) => {
-  const [title, setTitle] = useState('제목');
-  const [content, setContent] = useState('안녕하세여 이재혁입니다');
+const WritingPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const documentData = location.state || null;
+  
+  // documentData가 있으면 기존 글 불러오기, 없으면 새 글
+  const [title, setTitle] = useState(documentData?.title || '제목');
+  const [content, setContent] = useState(documentData?.content || '');
+  
+  // 카테고리 이름 매핑
+  const getCategoryName = (categoryId) => {
+    const categoryMap = {
+      'resume': 'Resume',
+      'report': 'Report',
+      'essay': 'Essay',
+      'cover-letter': 'Cover Letter'
+    }
+    return categoryMap[categoryId] || 'Essay'
+  }
+  
+  const documentType = getCategoryName(documentData?.category);
   const [feedbackType, setFeedbackType] = useState('sentence'); // 'sentence' or 'structure'
   const [sentenceFeedback, setSentenceFeedback] = useState('');
   const [structureFeedback, setStructureFeedback] = useState({
@@ -12,7 +32,24 @@ const WritingPage = ({ documentType = 'Essay' }) => {
     conclusion: '' // 결론 피드백
   });
   const [wordCount, setWordCount] = useState(0);
+
+  // 페이지 진입 시 body에 그라데이션 배경 적용
+  useEffect(() => {
+    document.body.classList.add('gradient-body');
+    
+    return () => {
+      document.body.classList.remove('gradient-body');
+    };
+  }, []);
   const textareaRef = useRef(null);
+
+  // documentData가 변경되면 제목과 내용 업데이트
+  useEffect(() => {
+    if (documentData) {
+      setTitle(documentData.title || '제목');
+      setContent(documentData.content || '');
+    }
+  }, [documentData]);
 
   // 단어 수 계산
   useEffect(() => {
@@ -79,33 +116,6 @@ const WritingPage = ({ documentType = 'Essay' }) => {
 
   return (
     <div className="writing-page">
-      {/* Header */}
-      <header className="writing-header">
-        <div className="header-left">
-          <h1 className="logo">gAIde</h1>
-        </div>
-        <div className="header-center">
-          <div className="document-type-badge">
-            {documentType}
-          </div>
-        </div>
-        <div className="header-right">
-          <button className="save-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-            Save
-          </button>
-          <button className="icon-btn profile-btn" aria-label="Profile">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </button>
-        </div>
-      </header>
 
       {/* Main Content */}
       <div className="writing-container">

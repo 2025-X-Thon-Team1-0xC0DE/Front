@@ -1,7 +1,34 @@
-// 첫 번째 화면은 main.jsx에서 관리하고,
-// 두 번째 화면(글 작성 화면)은 main.jsx에서 WritingPage를 import하여 사용합니다.
-// 이 파일은 현재 사용되지 않습니다.
+import './App.css';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Header from './components/Header.jsx';
+import Login from './pages/Login.jsx';
+import MainPage from './pages/MainPage.jsx';
+import WritingPage from './pages/WritingPage.jsx';
+import MyPage from './pages/MyPage.jsx';
 
-export default function App() {
-  return null
+function AppContent() {
+  const location = useLocation();
+  const showHeader = location.pathname !== '/';
+
+  return (
+    <>
+      {showHeader && <Header />}
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/writing" element={<WritingPage />} />
+        <Route path="/mypage" element={<MyPage />} />
+      </Routes>
+    </>
+  );
 }
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+}
+
+export default App;
