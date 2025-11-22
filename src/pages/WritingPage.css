@@ -1,0 +1,358 @@
+.writing-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Header Styles */
+.writing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  height: 64px;
+  box-sizing: border-box;
+  margin-top: 80px;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a237e;
+  margin: 0;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.document-type-badge {
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+}
+
+.header-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #d0d0d0;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.save-btn {
+  background-color: #7b1fa2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+  background-color: #6a1b9a;
+}
+
+.save-btn svg {
+  stroke: white;
+}
+
+/* Main Container */
+.writing-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Left Panel - Writing Area */
+.writing-area {
+  flex: 2;
+  background-color: #ffffff;
+  padding: 40px 40px 80px 40px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-height: calc(100vh - 64px - 160px);
+}
+
+.title-input {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+  border: none;
+  outline: none;
+  margin-bottom: 24px;
+  min-height: 48px;
+  padding: 0;
+}
+
+.title-input:empty:before {
+  content: attr(data-placeholder);
+  color: #999;
+}
+
+.content-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  resize: none;
+  font-family: inherit;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.content-input::placeholder {
+  color: #999;
+}
+
+.word-count {
+  font-size: 14px;
+  color: #999;
+  margin-top: auto;
+}
+
+/* Right Panel - Feedback Area */
+.feedback-area {
+  flex: 1;
+  background-color: #f5f5f5;
+  padding: 24px 24px 80px 24px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-left: 1px solid #e0e0e0;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.feedback-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.star-icon {
+  color: #7b1fa2;
+  stroke: #7b1fa2;
+  fill: #7b1fa2;
+}
+
+/* Feedback Type Buttons */
+.feedback-type-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.feedback-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.feedback-btn:hover {
+  background-color: #f9f9f9;
+  border-color: #d0d0d0;
+}
+
+.feedback-btn.active {
+  background-color: #7b1fa2;
+  color: white;
+  border-color: #7b1fa2;
+}
+
+.feedback-btn.active:hover {
+  background-color: #6a1b9a;
+}
+
+/* Feedback Content */
+.feedback-content {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 200px;
+}
+
+.empty-feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  text-align: center;
+}
+
+.lightbulb-icon {
+  color: #d0d0d0;
+  margin-bottom: 16px;
+}
+
+.empty-feedback p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #999;
+}
+
+.sentence-feedback,
+.structure-feedback {
+  height: 100%;
+}
+
+.feedback-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  margin-top: 16px;
+}
+
+.feedback-label:first-child {
+  margin-top: 0;
+}
+
+.feedback-sentence {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-left: 3px solid #7b1fa2;
+  border-radius: 4px;
+}
+
+.feedback-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+/* 구조 피드백 섹션 */
+.structure-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.structure-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.structure-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #7b1fa2;
+  display: inline-block;
+  width: fit-content;
+}
+
+.structure-section-feedback {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  min-height: 60px;
+}
+
+/* Scrollbar Styling */
+.writing-area::-webkit-scrollbar,
+.feedback-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.writing-area::-webkit-scrollbar-track,
+.feedback-area::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.writing-area::-webkit-scrollbar-thumb,
+.feedback-area::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.writing-area::-webkit-scrollbar-thumb:hover,
+.feedback-area::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+

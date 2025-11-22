@@ -7,6 +7,13 @@ import Signup from './pages/Signup.jsx';
 function AppContent() {
   const location = useLocation();
   const showHeader = location.pathname !== '/' && location.pathname !== '/signup';
+import MainPage from './pages/MainPage.jsx';
+import WritingPage from './pages/WritingPage.jsx';
+import MyPage from './pages/MyPage.jsx';
+
+function AppContent() {
+  const location = useLocation();
+  const showHeader = location.pathname !== '/';
 
   return (
     <>
@@ -27,4 +34,21 @@ function App() {
   );
 }
   
+export default App;
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/writing" element={<WritingPage />} />
+        <Route path="/mypage" element={<MyPage />} />
+      </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+}
+
 export default App;
