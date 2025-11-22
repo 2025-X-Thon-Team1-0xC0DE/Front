@@ -26,6 +26,9 @@ function Login() {
             <h2 className="section-title">로그인</h2>
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="form-group">
+                <label htmlFor="id" className="form-label">
+                  ID
+                </label>
                 <input
                   type="text"
                   id="id"
@@ -38,6 +41,9 @@ function Login() {
               </div>
 
               <div className="form-group">
+                <label htmlFor="password" className="form-label">
+                  비밀번호
+                </label>
                 <input
                   type="password"
                   id="password"
