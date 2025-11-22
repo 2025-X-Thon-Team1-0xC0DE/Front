@@ -1,9 +1,42 @@
+/* WritingPage에서 #root의 아래쪽 패딩 100px 추가 */
+body.gradient-body #root {
+  padding-bottom: 100px;
+}
+
+/* Writing Page Wrapper - 전체 틀 */
+.writing-page-wrapper {
+  width: calc(100% - 80px);
+  max-width: calc(100vw - 80px);
+  margin: 40px auto 80px auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 120px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.writing-page-wrapper .header {
+  flex-shrink: 0;
+  margin: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
 .writing-page {
   width: 100%;
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
   font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+  box-shadow: none;
+  flex: 1;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Header Styles */
@@ -16,7 +49,8 @@
   border-bottom: 1px solid #e0e0e0;
   height: 64px;
   box-sizing: border-box;
-  margin-top: 80px;
+  margin-top: 0;
+  border-radius: 8px 8px 0 0;
 }
 
 .header-left {
@@ -146,7 +180,7 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  min-height: calc(100vh - 64px - 160px);
+  height: calc(100vh - 80px - 64px - 100px);
 }
 
 .title-input {
@@ -154,10 +188,11 @@
   font-weight: 700;
   color: #000;
   border: none;
+  border-bottom: 1px solid #e0e0e0;
   outline: none;
   margin-bottom: 24px;
   min-height: 48px;
-  padding: 0;
+  padding: 0 0 16px 0;
 }
 
 .title-input:empty:before {
@@ -186,6 +221,7 @@
   font-size: 14px;
   color: #999;
   margin-top: auto;
+  margin-bottom: 20px;
 }
 
 /* Right Panel - Feedback Area */

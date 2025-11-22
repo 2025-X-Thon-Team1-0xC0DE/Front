@@ -12,10 +12,10 @@ const MyPage = () => {
 
   // 페이지 진입 시 body에 그라데이션 배경 적용
   useEffect(() => {
-    document.body.classList.add('gradient-body');
+    document.body.classList.add('gradient-body', 'my-page-body');
     
     return () => {
-      document.body.classList.remove('gradient-body');
+      document.body.classList.remove('gradient-body', 'my-page-body');
     };
   }, []);
 
