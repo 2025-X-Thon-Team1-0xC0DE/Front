@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { saveDocument, getFinalEvaluation } from '../api/writing';
 import './WritingPage.css';
 import '../components/Background.css';
 
@@ -31,6 +32,8 @@ const WritingPage = () => {
     body: '', // 본론 피드백
     conclusion: '' // 결론 피드백
   });
+  const [finalEvaluation, setFinalEvaluation] = useState(''); // 최종 평가
+  const [showFinalEvaluation, setShowFinalEvaluation] = useState(false); // 최종 평가 표시 여부
   const [wordCount, setWordCount] = useState(0);
 
   // 페이지 진입 시 body에 그라데이션 배경 적용
@@ -60,6 +63,14 @@ const WritingPage = () => {
   // textarea 입력 처리
   const handleContentChange = (e) => {
     setContent(e.target.value);
+  };
+
+  // 엔터 키 처리 (최종 평가 상태 해제)
+  const handleContentKeyDown = (e) => {
+    if (e.key === 'Enter' && showFinalEvaluation) {
+      // 최종 평가가 표시된 상태에서 엔터를 치면 최종 평가 숨기기
+      setShowFinalEvaluation(false);
+    }
   };
 
   // 문장 단위 피드백 (최근 문장 추출)
@@ -98,6 +109,8 @@ const WritingPage = () => {
   // 피드백 타입 변경
   const handleFeedbackTypeChange = (type) => {
     setFeedbackType(type);
+    // 피드백 타입을 변경하면 최종 평가 숨기기
+    setShowFinalEvaluation(false);
   };
 
   // 제목 포커스 처리
@@ -114,13 +127,52 @@ const WritingPage = () => {
     setTitle(e.target.textContent);
   };
 
+  // 저장 핸들러
+  const handleSave = async () => {
+    try {
+      // 먼저 문서 저장
+      await saveDocument({
+        documentId: documentData?.documentId || null,
+        title: title === '제목' ? '' : title,
+        content: content,
+        category: documentData?.category || 'essay',
+      });
+      
+      // 피드백 타입을 'sentence'로 설정
+      setFeedbackType('sentence');
+      
+      // 최종 평가 요청
+      const evaluationData = await getFinalEvaluation({
+        documentId: documentData?.documentId || null,
+        title: title === '제목' ? '' : title,
+        content: content,
+        category: documentData?.category || 'essay',
+      });
+      
+      // 최종 평가 표시
+      setFinalEvaluation(evaluationData.evaluation || evaluationData.feedback || '');
+      setShowFinalEvaluation(true);
+      
+      alert('저장되었습니다.');
+    } catch (error) {
+      console.error('저장 오류:', error);
+      alert('저장에 실패했습니다.');
+    }
+  };
+
   return (
     <div className="writing-page">
 
       {/* Main Content */}
       <div className="writing-container">
-        {/* Left Panel - Writing Area */}
-        <div className="writing-area">
+        {/* Content Wrapper */}
+        <div className="writing-content-wrapper">
+          {/* Left Panel - Writing Area */}
+          <div className="writing-area">
+            {/* Category Display */}
+            <div className="category-display">
+              {documentType}
+            </div>
           <div
             className="title-input"
             contentEditable
@@ -136,16 +188,21 @@ const WritingPage = () => {
             className="content-input"
             value={content}
             onChange={handleContentChange}
+            onKeyDown={handleContentKeyDown}
             placeholder=""
           />
           <div className="word-count">{wordCount} words</div>
         </div>
 
-        {/* Right Panel - Feedback Area */}
-        <div className="feedback-area">
+          {/* Right Panel - Feedback Area */}
+          <div className="feedback-area">
           <div className="feedback-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="star-icon">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="coach-icon">
+              {/* 말풍선 아이콘 - 코칭과 피드백을 상징 */}
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              {/* 말풍선 안의 작은 원들 - 대화를 상징 */}
+              <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
+              <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
             </svg>
             <h2>Writing Coach</h2>
           </div>
@@ -156,7 +213,7 @@ const WritingPage = () => {
               className={`feedback-btn ${feedbackType === 'sentence' ? 'active' : ''}`}
               onClick={() => handleFeedbackTypeChange('sentence')}
             >
-              문장 피드백
+              피드백
             </button>
             <button
               className={`feedback-btn ${feedbackType === 'structure' ? 'active' : ''}`}
@@ -168,7 +225,14 @@ const WritingPage = () => {
 
           {/* Feedback Content */}
           <div className="feedback-content">
-            {feedbackType === 'sentence' ? (
+            {showFinalEvaluation ? (
+              <div className="final-evaluation">
+                <div className="feedback-label">최종 평가:</div>
+                <div className="feedback-text">
+                  {finalEvaluation || '최종 평가를 불러오는 중...'}
+                </div>
+              </div>
+            ) : feedbackType === 'sentence' ? (
               <div className="sentence-feedback">
                 {content.trim() && lastSentenceInfo ? (
                   <div>
@@ -231,6 +295,14 @@ const WritingPage = () => {
               </div>
             )}
           </div>
+
+          {/* Save Button */}
+          <div className="save-button-container">
+            <button className="save-button" onClick={handleSave}>
+              저장
+            </button>
+          </div>
+        </div>
         </div>
       </div>
     </div>
