@@ -114,6 +114,18 @@ const WritingPage = () => {
     setTitle(e.target.textContent);
   };
 
+  // 저장 핸들러
+  const handleSave = async () => {
+    try {
+      // TODO: 실제 API 연동 시 구현
+      console.log('저장:', { title, content, category: documentData?.category });
+      alert('저장되었습니다.');
+    } catch (error) {
+      console.error('저장 오류:', error);
+      alert('저장에 실패했습니다.');
+    }
+  };
+
   return (
     <div className="writing-page">
 
@@ -144,8 +156,12 @@ const WritingPage = () => {
         {/* Right Panel - Feedback Area */}
         <div className="feedback-area">
           <div className="feedback-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="star-icon">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="coach-icon">
+              {/* 말풍선 아이콘 - 코칭과 피드백을 상징 */}
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              {/* 말풍선 안의 작은 원들 - 대화를 상징 */}
+              <circle cx="9" cy="10" r="1" fill="currentColor"></circle>
+              <circle cx="15" cy="10" r="1" fill="currentColor"></circle>
             </svg>
             <h2>Writing Coach</h2>
           </div>
@@ -230,6 +246,13 @@ const WritingPage = () => {
                 )}
               </div>
             )}
+          </div>
+
+          {/* Save Button */}
+          <div className="save-button-container">
+            <button className="save-button" onClick={handleSave}>
+              저장
+            </button>
           </div>
         </div>
       </div>

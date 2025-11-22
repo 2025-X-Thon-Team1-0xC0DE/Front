@@ -91,7 +91,7 @@
 }
 
 .save-btn {
-  background-color: #7b1fa2;
+  background-color: #00BCD4;
   color: white;
   border: none;
   border-radius: 6px;
@@ -106,7 +106,7 @@
 }
 
 .save-btn:hover {
-  background-color: #6a1b9a;
+  background-color: #0097A7;
 }
 
 .save-btn svg {
@@ -174,7 +174,7 @@
 .feedback-area {
   flex: 1;
   background-color: #f5f5f5;
-  padding: 24px 24px 80px 24px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -195,10 +195,10 @@
   margin: 0;
 }
 
-.star-icon {
-  color: #7b1fa2;
-  stroke: #7b1fa2;
-  fill: #7b1fa2;
+.coach-icon {
+  color: #00BCD4;
+  stroke: #00BCD4;
+  fill: none;
 }
 
 /* Feedback Type Buttons */
@@ -227,13 +227,13 @@
 }
 
 .feedback-btn.active {
-  background-color: #7b1fa2;
+  background-color: #00BCD4;
   color: white;
-  border-color: #7b1fa2;
+  border-color: #00BCD4;
 }
 
 .feedback-btn.active:hover {
-  background-color: #6a1b9a;
+  background-color: #0097A7;
 }
 
 /* Feedback Content */
@@ -290,7 +290,7 @@
   margin-bottom: 16px;
   padding: 12px;
   background-color: #f9f9f9;
-  border-left: 3px solid #7b1fa2;
+  border-left: 3px solid #00BCD4;
   border-radius: 4px;
 }
 
@@ -319,7 +319,7 @@
   font-weight: 600;
   color: #333;
   padding-bottom: 8px;
-  border-bottom: 2px solid #7b1fa2;
+  border-bottom: 2px solid #00BCD4;
   display: inline-block;
   width: fit-content;
 }
@@ -354,5 +354,33 @@
 .writing-area::-webkit-scrollbar-thumb:hover,
 .feedback-area::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Save Button Container */
+.save-button-container {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.save-button {
+  width: 100%;
+  padding: 14px 24px;
+  background-color: #00BCD4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #0097A7;
+}
+
+.save-button:active {
+  background-color: #00838F;
+  transform: scale(0.98);
 }
 
