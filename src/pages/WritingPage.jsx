@@ -208,24 +208,19 @@ const WritingPage = () => {
   // 저장 + 최종 평가
   const handleSave = async () => {
     try {
-      await saveDocument({
+      const savedData = await saveDocument({
         documentId,
         title: title === "제목" ? "" : title,
         content,
         category,
+        keywords: [],
+        description: "",
       });
 
       setFeedbackType("sentence");
 
-      const evaluationData = await getFinalEvaluation({
-        documentId,
-        title: title === "제목" ? "" : title,
-        content,
-        category,
-      });
-
       setFinalEvaluation(
-        evaluationData.evaluation || evaluationData.feedback || ""
+        savedData.data.eval || ""
       );
       setShowFinalEvaluation(true);
 

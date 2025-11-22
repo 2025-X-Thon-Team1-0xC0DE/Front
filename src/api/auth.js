@@ -1,6 +1,31 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
+const ACCESS_TOKEN_KEY = 'accessToken';
+
+/**
+ * accessToken을 sessionStorage에 저장
+ * @param {string} token - 저장할 accessToken
+ */
+export const setAccessToken = (token) => {
+  sessionStorage.setItem(ACCESS_TOKEN_KEY, token);
+};
+
+/**
+ * sessionStorage에서 accessToken 가져오기
+ * @returns {string|null} 저장된 accessToken 또는 null
+ */
+export const getAccessToken = () => {
+  return sessionStorage.getItem(ACCESS_TOKEN_KEY);
+};
+
+/**
+ * sessionStorage에서 accessToken 삭제
+ */
+export const removeAccessToken = () => {
+  sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+};
+
 /**
  * 회원가입 API
  * @param {Object} userData
