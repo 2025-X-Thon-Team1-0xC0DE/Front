@@ -1,5 +1,7 @@
 // 글 작성 API 함수들
 
+import { getAccessToken } from './auth.js';
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 /**
@@ -13,7 +15,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000
  */
 export const createNewDocument = async (data) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/writing`, {
+    const response = await fetch(`${API_BASE_URL}/api/documents`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +46,7 @@ export const createNewDocument = async (data) => {
  */
 export const getDocument = async (documentId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/writing/${documentId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/documents/${documentId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ export const getDocument = async (documentId) => {
  */
 export const getMyDocuments = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/writing/my-documents`, {
+    const response = await fetch(`${API_BASE_URL}/api/documents/my-documents`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -98,20 +100,30 @@ export const getMyDocuments = async () => {
 export const saveDocument = async (data) => {
   try {
     const url = data.documentId 
-      ? `${API_BASE_URL}/api/writing/${data.documentId}`
-      : `${API_BASE_URL}/api/writing`;
+      ? `${API_BASE_URL}/api/documents/${data.documentId}`
+      : `${API_BASE_URL}/api/documents/`;
     
-    const method = data.documentId ? 'PUT' : 'POST';
+    const method = 'PATCH';
+    
+    const accessToken = getAccessToken();
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
+    // accessToken이 있으면 Authorization 헤더에 추가
+    if (accessToken) {
+      console.log('accessToken added to headers:', accessToken);
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
     
     const response = await fetch(url, {
       method: method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: headers,
       body: JSON.stringify({
-        title: data.title,
-        content: data.content,
         category: data.category,
+        keywords: data.keywords,
+        description: data.description,
+        content: data.content,
       }),
     });
 
@@ -137,7 +149,7 @@ export const saveDocument = async (data) => {
  */
 export const getFinalEvaluation = async (data) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/writing/final-evaluation`, {
+    const response = await fetch(`${API_BASE_URL}/api/documents/final-evaluation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

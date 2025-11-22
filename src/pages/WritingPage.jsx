@@ -45,6 +45,7 @@ const WritingPage = () => {
     };
   }, []);
   const textareaRef = useRef(null);
+  const titleRef = useRef(null);
 
   // documentData가 변경되면 제목과 내용 업데이트
   useEffect(() => {
@@ -130,21 +131,39 @@ const WritingPage = () => {
   // 저장 핸들러
   const handleSave = async () => {
     try {
-      // 먼저 문서 저장
-      await saveDocument({
+      // contentEditable에서 현재 제목 가져오기
+      const currentTitleElement = titleRef.current;
+      let currentTitle = currentTitleElement?.textContent?.trim() || title;
+      
+      // '제목' 플레이스홀더인 경우 빈 문자열로 처리
+      if (currentTitle === '제목') {
+        currentTitle = '';
+      }
+      
+      // 1. 먼저 문서 저장
+      const savedData = await saveDocument({
         documentId: documentData?.documentId || null,
-        title: title === '제목' ? '' : title,
-        content: content,
+        title: currentTitle,
         category: documentData?.category || 'essay',
+        keywords: documentData?.keywords || [],
+        description: documentData?.description || '',
+        content: content,
       });
       
-      // 피드백 타입을 'sentence'로 설정
-      setFeedbackType('sentence');
+      // 저장 성공 시 제목 state 업데이트
+      if (currentTitle !== title) {
+        setTitle(currentTitle || '제목');
+      }
       
-      // 최종 평가 요청
+      // 저장 성공 시 documentId 업데이트 (새로 생성된 문서인 경우)
+      if (savedData?.documentId && !documentData?.documentId) {
+        console.log('문서가 저장되었습니다. documentId:', savedData.documentId);
+      }
+      
+      // 2. 그 다음 최종 평가 요청
       const evaluationData = await getFinalEvaluation({
         documentId: documentData?.documentId || null,
-        title: title === '제목' ? '' : title,
+        title: currentTitle,
         content: content,
         category: documentData?.category || 'essay',
       });
@@ -153,10 +172,13 @@ const WritingPage = () => {
       setFinalEvaluation(evaluationData.evaluation || evaluationData.feedback || '');
       setShowFinalEvaluation(true);
       
+      // 피드백 타입을 'sentence'로 설정
+      setFeedbackType('sentence');
+      
       alert('저장되었습니다.');
     } catch (error) {
       console.error('저장 오류:', error);
-      alert('저장에 실패했습니다.');
+      alert('저장에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
     }
   };
 
@@ -174,6 +196,7 @@ const WritingPage = () => {
               {documentType}
             </div>
           <div
+            ref={titleRef}
             className="title-input"
             contentEditable
             suppressContentEditableWarning
