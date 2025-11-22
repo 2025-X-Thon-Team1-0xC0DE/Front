@@ -1,8 +1,10 @@
 import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './main.css'
+import WritingPage from './pages/WritingPage'
 
 function App() {
+  const [showWritingPage, setShowWritingPage] = useState(true) // true로 설정하면 바로 두 번째 화면 표시
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [title, setTitle] = useState('')
   const [keywordInput, setKeywordInput] = useState('')
@@ -119,6 +121,29 @@ function App() {
       keywords,
       topicDescription
     })
+    // 두 번째 화면(글 작성 화면)으로 이동
+    setShowWritingPage(true)
+  }
+
+  // 두 번째 화면에서 첫 번째 화면으로 돌아가기
+  const handleBackToSelection = () => {
+    setShowWritingPage(false)
+  }
+
+  // 카테고리 이름 매핑
+  const getCategoryName = (categoryId) => {
+    const categoryMap = {
+      'resume': 'Resume',
+      'report': 'Report',
+      'essay': 'Essay',
+      'cover-letter': 'Cover Letter'
+    }
+    return categoryMap[categoryId] || 'Essay'
+  }
+
+  // 두 번째 화면 표시
+  if (showWritingPage) {
+    return <WritingPage documentType={getCategoryName(selectedCategory)} onBack={handleBackToSelection} />
   }
 
   return (
