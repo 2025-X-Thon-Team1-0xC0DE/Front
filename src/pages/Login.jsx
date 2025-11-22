@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import './Login.css';
+import { Link } from 'react-router-dom';
+import './Auth.css';
 
 function Login() {
   const [id, setId] = useState('');
@@ -12,18 +13,18 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
+    <div className="auth-container">
       {/* Main Content */}
-      <div className="login-main">
-        <div className="login-instruction">
-          <h1 className="login-title">gAIde</h1>
-          <p className="login-subtitle">당신이 쓴 문장에 AI의 손길을 더해주는 글 첨삭 파트너</p>
+      <div className="auth-main">
+        <div className="auth-instruction">
+          <h1 className="auth-title">gAIde</h1>
+          <p className="auth-subtitle">당신이 쓴 문장에 AI의 손길을 더해주는 글 첨삭 파트너</p>
         </div>
 
-        <div className="login-content">
-          <div className="login-form-section">
+        <div className="auth-content">
+          <div className="auth-form-section">
             <h2 className="section-title">로그인</h2>
-            <form onSubmit={handleSubmit} className="login-form">
+            <form onSubmit={handleSubmit} className="auth-form">
               <div className="form-group">
                 <input
                   type="text"
@@ -48,12 +49,12 @@ function Login() {
                 />
               </div>
 
-              <button type="submit" className="login-button">
+              <button type="submit" className="auth-button">
                 LogIn
               </button>
             </form>
-            <div className="signup-link">
-              <p>계정이 없으신가요? <a href="#">회원가입</a></p>
+            <div className="auth-link">
+              <p>계정이 없으신가요? <Link to="/signup">회원가입</Link></p>
             </div>
           </div>
         </div>
