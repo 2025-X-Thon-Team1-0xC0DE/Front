@@ -38,7 +38,8 @@ function Signup() {
         password: password,
         name: name,
       });
-
+      
+      console.log(response);
       if (response.success) {
         alert('회원가입이 완료되었습니다!');
         navigate('/');
@@ -139,7 +140,7 @@ function Signup() {
                 className="auth-button"
                 disabled={isLoading}
               >
-                {isLoading ? '처리 중...' : 'SignUp'}
+                {isLoading ? '처리 중...' : '회원가입'}
               </button>
             </form>
             <div className="auth-link">
