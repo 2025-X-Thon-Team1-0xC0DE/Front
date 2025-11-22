@@ -48,6 +48,7 @@
     flex: 1;
     min-height: 0;
     overflow: hidden;
+    align-items: stretch;
   }
   
   .category-section {
@@ -55,7 +56,9 @@
     flex-direction: column;
     min-height: 0;
     overflow-y: auto;
-  
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 24px;
   }
   
   .section-title {
@@ -141,6 +144,9 @@
     min-height: 0;
     overflow-y: auto;
     height: 100%;
+    padding: 0;
+    margin: 0;
+    align-self: stretch;
   }
   
   .details-container {
@@ -297,8 +303,8 @@
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background-color: #f3e5f5;
-    color: #9c27b0;
+    background-color: #e3f2fd;
+    color: #1976d2;
     border-radius: 20px;
     font-size: 12px;
   }
@@ -306,7 +312,7 @@
   .keyword-remove {
     cursor: pointer;
     font-weight: bold;
-    color: #9c27b0;
+    color: #1976d2;
   }
   
   .submit-button {

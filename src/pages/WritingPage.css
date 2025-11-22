@@ -220,8 +220,40 @@ body.gradient-body #root {
 .word-count {
   font-size: 14px;
   color: #999;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+/* 피드백 요청 버튼 */
+.feedback-request-container {
+  margin-bottom: 0;
   margin-top: auto;
-  margin-bottom: 20px;
+  padding-bottom: 24px;
+}
+
+.feedback-request-button {
+  width: 100%;
+  padding: 14px 24px;
+  background-color: #00BCD4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.feedback-request-button:hover:not(:disabled) {
+  background-color: #0097A7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3);
+}
+
+.feedback-request-button:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* Right Panel - Feedback Area */
@@ -337,15 +369,25 @@ body.gradient-body #root {
   margin-top: 0;
 }
 
-.feedback-sentence {
+.feedback-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feedback-item {
   font-size: 14px;
-  color: #666;
-  font-style: italic;
-  margin-bottom: 16px;
+  color: #333;
+  line-height: 1.6;
   padding: 12px;
+  margin-bottom: 8px;
   background-color: #f9f9f9;
+  border-radius: 6px;
   border-left: 3px solid #00BCD4;
-  border-radius: 4px;
+}
+
+.feedback-item:last-child {
+  margin-bottom: 0;
 }
 
 .feedback-text {
