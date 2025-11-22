@@ -120,6 +120,24 @@
   overflow: hidden;
 }
 
+/* Content Wrapper */
+.writing-content-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Category Display */
+.category-display {
+  text-align: center;
+  padding: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #666;
+  background-color: transparent;
+  margin-bottom: 8px;
+}
+
 /* Left Panel - Writing Area */
 .writing-area {
   flex: 2;
@@ -301,6 +319,31 @@
   margin-bottom: 16px;
 }
 
+/* 최종 평가 섹션 */
+.final-evaluation {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.final-evaluation .feedback-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.final-evaluation .feedback-text {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  white-space: pre-wrap;
+}
+
 /* 구조 피드백 섹션 */
 .structure-sections {
   display: flex;
@@ -382,5 +425,28 @@
 .save-button:active {
   background-color: #00838F;
   transform: scale(0.98);
+}
+
+/* Final Evaluation Styles */
+.final-evaluation-title {
+  margin-bottom: 24px;
+}
+
+.final-evaluation-title h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.final-evaluation-content {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  line-height: 1.8;
+  color: #333;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
