@@ -1,3 +1,8 @@
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { saveDocument, getFinalEvaluation, requestSentenceFeedback } from '../api/writing';
+import './WritingPage.css';
+import '../components/Background.css';
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { saveDocument, getFinalEvaluation, getDocument } from "../api/writing";
@@ -26,6 +31,18 @@ const WritingPage = () => {
   // 카테고리 이름 매핑
   const getCategoryName = (categoryId) => {
     const categoryMap = {
+      'resume': 'Resume',
+      'report': 'Report',
+      'essay': 'Essay',
+      'cover-letter': 'Cover Letter'
+    }
+    return categoryMap[categoryId] || 'Essay'
+  }
+  
+  const documentType = getCategoryName(documentData?.category);
+  const [feedbackType, setFeedbackType] = useState('sentence'); // 'sentence' or 'structure'
+  const [sentenceFeedback, setSentenceFeedback] = useState([]); // 피드백 배열로 변경
+  const [isLoadingFeedback, setIsLoadingFeedback] = useState(false); // 피드백 로딩 상태
       resume: "Resume",
       RESUME: "Resume",
       report: "Report",
@@ -50,6 +67,7 @@ const WritingPage = () => {
   const [finalEvaluation, setFinalEvaluation] = useState("");
   const [showFinalEvaluation, setShowFinalEvaluation] = useState(false);
   const [wordCount, setWordCount] = useState(0);
+  const [keywords, setKeywords] = useState(documentData?.keywords || []); // 키워드 상태 추가
 
   // 배경 그라데이션
   useEffect(() => {
@@ -100,9 +118,44 @@ const WritingPage = () => {
     setContent(e.target.value);
   };
 
+  // 피드백 요청 핸들러
+  const handleRequestFeedback = async () => {
+    if (!content.trim()) {
+      alert('피드백을 받을 내용이 없습니다.');
+      return;
+    }
+
+    setIsLoadingFeedback(true);
+    try {
+      const response = await requestSentenceFeedback({
+        doc_id: documentData?.documentId || null,
+        category: documentData?.category || 'essay',
+        keywords: keywords,
+        user_text: content,
+      });
+
+      // 응답 처리: eval을 배열로 변환 (줄바꿈 기준으로 분리)
+      if (response.data && response.data.eval) {
+        const feedbackItems = response.data.eval
+          .split('\n')
+          .filter(item => item.trim().length > 0)
+          .map(item => item.trim());
+        setSentenceFeedback(feedbackItems);
+      } else {
+        setSentenceFeedback(['피드백을 받을 수 없습니다.']);
+      }
+
+      // 피드백 타입을 'sentence'로 설정
+      setFeedbackType('sentence');
   const handleContentKeyDown = (e) => {
     if (e.key === "Enter" && showFinalEvaluation) {
       setShowFinalEvaluation(false);
+    } catch (error) {
+      console.error('피드백 요청 오류:', error);
+      alert('피드백 요청에 실패했습니다.');
+      setSentenceFeedback([]);
+    } finally {
+      setIsLoadingFeedback(false);
     }
   };
 
@@ -220,6 +273,26 @@ const WritingPage = () => {
             />
             <div className="word-count">{wordCount} words</div>
           </div>
+          <textarea
+            ref={textareaRef}
+            className="content-input"
+            value={content}
+            onChange={handleContentChange}
+            placeholder=""
+          />
+          <div className="word-count">{wordCount} words</div>
+          
+          {/* 피드백 요청 버튼 */}
+          <div className="feedback-request-container">
+            <button 
+              className="feedback-request-button"
+              onClick={handleRequestFeedback}
+              disabled={isLoadingFeedback || !content.trim()}
+            >
+              {isLoadingFeedback ? '피드백 요청 중...' : '피드백 요청'}
+            </button>
+          </div>
+        </div>
 
           {/* Right - 피드백 영역 */}
           <div className="feedback-area">
@@ -261,6 +334,48 @@ const WritingPage = () => {
               </button>
             </div>
 
+          {/* Feedback Content */}
+          <div className="feedback-content">
+            {showFinalEvaluation ? (
+              <div className="final-evaluation">
+                <div className="feedback-label">최종 평가:</div>
+                <div className="feedback-text">
+                  {finalEvaluation || '최종 평가를 불러오는 중...'}
+                </div>
+              </div>
+            ) : feedbackType === 'sentence' ? (
+              <div className="sentence-feedback">
+                {sentenceFeedback.length > 0 ? (
+                  <div>
+                    <div className="feedback-label">개선 제안:</div>
+                    <ul className="feedback-list">
+                      {sentenceFeedback.map((item, index) => (
+                        <li key={index} className="feedback-item">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div className="empty-feedback">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="lightbulb-icon">
+                      <path d="M9 21h6"></path>
+                      <path d="M12 3a6 6 0 0 0-6 6c0 2.5 1.5 4.5 3 6l3 3 3-3c1.5-1.5 3-3.5 3-6a6 6 0 0 0-6-6z"></path>
+                    </svg>
+                    <p>피드백 요청 버튼을 눌러</p>
+                    <p>AI의 개선 제안을 받아보세요.</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="structure-feedback">
+                {content.trim() ? (
+                  <div className="structure-sections">
+                    {/* 서론 섹션 */}
+                    <div className="structure-section">
+                      <div className="structure-section-title">서론</div>
+                      <div className="structure-section-feedback">
+                        {structureFeedback.introduction || '서론에 대한 피드백이 여기에 표시됩니다.'}
             <div className="feedback-content">
               {showFinalEvaluation ? (
                 <div className="final-evaluation">

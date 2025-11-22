@@ -12,9 +12,10 @@ const MyPage = () => {
 
   // 그라데이션 배경 유지
   useEffect(() => {
-    document.body.classList.add("gradient-body");
+    document.body.classList.add('gradient-body', 'my-page-body');
+    
     return () => {
-      document.body.classList.remove("gradient-body");
+      document.body.classList.remove('gradient-body', 'my-page-body');
     };
   }, []);
 

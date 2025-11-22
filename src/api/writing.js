@@ -124,6 +124,43 @@ export const saveDocument = async (data) => {
 };
 
 /**
+ * 문장 피드백 요청 (request_type: 1)
+ * @param {Object} data - 피드백 요청 데이터
+ * @param {number} data.doc_id - 문서 ID
+ * @param {string} data.category - 카테고리
+ * @param {Array} data.keywords - 키워드 배열
+ * @param {string} data.user_text - 사용자가 작성한 텍스트
+ * @returns {Promise<Object>} - 피드백 응답
+ */
+export const requestSentenceFeedback = async (data) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/writing/feedback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        doc_id: data.doc_id,
+        category: data.category,
+        keywords: data.keywords || [],
+        request_type: 1, // 문장 피드백
+        user_text: data.user_text,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('피드백 요청 실패');
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('피드백 요청 오류:', error);
+    throw error;
+  }
+};
+
+/**
  * 최종 평가 요청
  */
 export const getFinalEvaluation = async (data) => {

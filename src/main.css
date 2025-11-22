@@ -330,8 +330,8 @@ body {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background-color: #f3e5f5;
-  color: #9c27b0;
+  background-color: #e3f2fd;
+  color: #1976d2;
   border-radius: 20px;
   font-size: 12px;
 }
@@ -339,7 +339,7 @@ body {
 .keyword-remove {
   cursor: pointer;
   font-weight: bold;
-  color: #9c27b0;
+  color: #1976d2;
 }
 
 .submit-button {
