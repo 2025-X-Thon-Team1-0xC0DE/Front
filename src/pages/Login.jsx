@@ -1,22 +1,22 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Auth.css';
-import { login } from '../api/auth.js';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Auth.css";
+import { login } from "../api/auth.js";
 
 function Login() {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     // 입력값 검증
     if (!id || !password) {
-      setError('모든 필드를 입력해주세요.');
+      setError("모든 필드를 입력해주세요.");
       return;
     }
 
@@ -29,13 +29,13 @@ function Login() {
       });
 
       if (response.success) {
-        alert('로그인에 성공했습니다!');
-        navigate('/main');
+        alert("로그인에 성공했습니다!");
+        navigate("/documents");
       } else {
-        setError(response.error || '로그인에 실패했습니다.');
+        setError(response.error || "로그인에 실패했습니다.");
       }
     } catch (err) {
-      setError(err.message || '로그인 중 오류가 발생했습니다.');
+      setError(err.message || "로그인 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -47,7 +47,9 @@ function Login() {
       <div className="auth-main">
         <div className="auth-instruction">
           <h1 className="auth-title">gAIde</h1>
-          <p className="auth-subtitle">당신이 쓴 문장에 AI의 손길을 더해주는 글 첨삭 파트너</p>
+          <p className="auth-subtitle">
+            당신이 쓴 문장에 AI의 손길을 더해주는 글 첨삭 파트너
+          </p>
         </div>
 
         <div className="auth-content">
@@ -85,21 +87,23 @@ function Login() {
               </div>
 
               {error && (
-                <div className="error-message" style={{ marginTop: '0.5rem' }}>
+                <div className="error-message" style={{ marginTop: "0.5rem" }}>
                   {error}
                 </div>
               )}
 
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="auth-button"
                 disabled={isLoading}
               >
-                {isLoading ? '처리 중...' : 'LogIn'}
+                {isLoading ? "처리 중..." : "LogIn"}
               </button>
             </form>
             <div className="auth-link">
-              <p>계정이 없으신가요? <Link to="/signup">회원가입</Link></p>
+              <p>
+                계정이 없으신가요? <Link to="/signup">회원가입</Link>
+              </p>
             </div>
           </div>
         </div>
@@ -109,4 +113,3 @@ function Login() {
 }
 
 export default Login;
-
