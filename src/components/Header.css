@@ -33,3 +33,9 @@
   color: #4b5563;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1.5rem;
+  }
+}

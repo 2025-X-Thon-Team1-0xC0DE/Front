@@ -1,166 +1,200 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './MainPage.css'
-import '../components/Background.css'
-import { createNewDocument } from '../api/writing'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./MainPage.css";
+import "../components/Background.css";
+import { createNewDocument } from "../api/writing";
 
 const MainPage = () => {
-  const navigate = useNavigate()
-  const [selectedCategory, setSelectedCategory] = useState(null)
-  const [title, setTitle] = useState('')
-  const [keywordInput, setKeywordInput] = useState('')
-  const [keywords, setKeywords] = useState([])
-  const [topicDescription, setTopicDescription] = useState('')
+  const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [title, setTitle] = useState("");
+  const [keywordInput, setKeywordInput] = useState("");
+  const [keywords, setKeywords] = useState([]);
+  const [topicDescription, setTopicDescription] = useState("");
 
   // 페이지 진입 시 body에 그라데이션 배경 적용
   useEffect(() => {
-    document.body.classList.add('gradient-body');
-    
+    document.body.classList.add("gradient-body");
     return () => {
-      document.body.classList.remove('gradient-body');
+      document.body.classList.remove("gradient-body");
     };
   }, []);
 
   const categories = [
     {
-      id: 'resume',
-      title: 'Resume',
-      description: '경력과 역량을 효과적으로 전달하세요',
-      icon: 'briefcase',
-      bgColor: '#E3F2FD',
-      iconColor: '#2196F3',
-      selectedBorderColor: '#64B5F6',
-      buttonColor: '#5C6BC0',
-      buttonHoverColor: '#3F51B5'
+      id: "RESUME",
+      title: "Resume",
+      description: "경력과 역량을 효과적으로 전달하세요",
+      icon: "briefcase",
+      bgColor: "#E3F2FD",
+      iconColor: "#2196F3",
+      selectedBorderColor: "#64B5F6",
+      buttonColor: "#5C6BC0",
+      buttonHoverColor: "#3F51B5",
     },
     {
-      id: 'report',
-      title: 'Report',
-      description: '체계적인 보고서를 작성하세요',
-      icon: 'document',
-      bgColor: '#E8F5E9',
-      iconColor: '#4CAF50',
-      selectedBorderColor: '#81C784',
-      buttonColor: '#43A047',
-      buttonHoverColor: '#2E7D32'
+      id: "REPORT",
+      title: "Report",
+      description: "체계적인 보고서를 작성하세요",
+      icon: "document",
+      bgColor: "#E8F5E9",
+      iconColor: "#4CAF50",
+      selectedBorderColor: "#81C784",
+      buttonColor: "#43A047",
+      buttonHoverColor: "#2E7D32",
     },
     {
-      id: 'essay',
-      title: 'Essay',
-      description: '논리적인 에세이를 완성하세요',
-      icon: 'graduation',
-      bgColor: '#FFFDE7',
-      iconColor: '#FFC107',
-      selectedBorderColor: '#FFE082',
-      buttonColor: '#E65100',
-      buttonHoverColor: '#BF360C'
+      id: "ESSAY",
+      title: "Essay",
+      description: "논리적인 에세이를 완성하세요",
+      icon: "graduation",
+      bgColor: "#FFFDE7",
+      iconColor: "#FFC107",
+      selectedBorderColor: "#FFE082",
+      buttonColor: "#E65100",
+      buttonHoverColor: "#BF360C",
     },
     {
-      id: 'cover-letter',
-      title: 'Cover Letter',
-      description: '인상적인 자기소개서를 만드세요',
-      icon: 'envelope',
-      bgColor: '#FCE4EC',
-      iconColor: '#F44336',
-      selectedBorderColor: '#EF5350',
-      buttonColor: '#B71C1C',
-      buttonHoverColor: '#8B0000'
-    }
-  ]
+      id: "COVER_LETTER",
+      title: "Cover_letter",
+      description: "인상적인 자기소개서를 만드세요",
+      icon: "envelope",
+      bgColor: "#FCE4EC",
+      iconColor: "#F44336",
+      selectedBorderColor: "#EF5350",
+      buttonColor: "#B71C1C",
+      buttonHoverColor: "#8B0000",
+    },
+  ];
 
   const renderCategoryIcon = (iconType) => {
     switch (iconType) {
-      case 'briefcase':
+      case "briefcase":
         return (
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
           </svg>
-        )
-      case 'document':
+        );
+      case "document":
         return (
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
             <line x1="16" y1="17" x2="8" y2="17"></line>
             <polyline points="10 9 9 9 8 9"></polyline>
           </svg>
-        )
-      case 'graduation':
+        );
+      case "graduation":
         return (
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
           </svg>
-        )
-      case 'envelope':
+        );
+      case "envelope":
         return (
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
             <polyline points="22,6 12,13 2,6"></polyline>
           </svg>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   const handleAddKeyword = () => {
     if (keywordInput.trim() && keywords.length < 5) {
-      setKeywords([...keywords, keywordInput.trim()])
-      setKeywordInput('')
+      setKeywords([...keywords, keywordInput.trim()]);
+      setKeywordInput("");
     }
-  }
+  };
 
   const handleRemoveKeyword = (index) => {
-    setKeywords(keywords.filter((_, i) => i !== index))
-  }
+    setKeywords(keywords.filter((_, i) => i !== index));
+  };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      handleAddKeyword()
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddKeyword();
     }
-  }
+  };
 
+  // "작성 시작하기" 클릭 시
   const handleSubmit = async () => {
     if (!selectedCategory) return;
 
     try {
-      // 백엔드에 새 글 작성 요청
-      const response = await createNewDocument({
+      // 1) 글 생성
+      const createResponse = await createNewDocument({
         category: selectedCategory,
-        title: title || '제목 없음',
-        keywords: keywords,
-        topicDescription: topicDescription,
+        title: title || "제목 없음",
+        keywords,
+        topicDescription,
       });
 
-      // 글 작성 화면으로 이동 (documentId를 state로 전달)
-      navigate('/writing', {
+      console.log("createResponse", createResponse);
+
+      // 2) 응답에서 doc_id 추출
+      const documentId = createResponse.data || createResponse;
+
+      if (!documentId) {
+        throw new Error("문서 ID를 받지 못했습니다.");
+      }
+
+      // 3) 글 조회 페이지로 이동 (글 조회 API는 WritingPage에서 호출)
+      navigate(`/documents/${documentId}`, {
         state: {
-          documentId: response.documentId || response.id,
-          title: title || '제목',
-          content: '', // 새로 생성한 경우 빈 내용
           category: selectedCategory,
-        }
+          title,
+          keywords,
+          topicDescription,
+        },
       });
     } catch (error) {
-      console.error('글 작성 요청 오류:', error);
-      // 에러 발생 시에도 글 작성 화면으로 이동 (개발 중)
-      navigate('/writing', {
-        state: {
-          title: title || '제목',
-          content: '',
-          category: selectedCategory,
-        }
-      });
+      console.error("글 작성 요청 오류:", error);
+      alert("글 작성 오류입니다!");
     }
   };
-
-  const handleGoToMyPage = () => {
-    navigate('/mypage')
-  }
 
   return (
     <div className="app-container">
@@ -178,16 +212,19 @@ const MainPage = () => {
                 <div
                   key={category.id}
                   className={`category-card ${category.id} ${
-                    selectedCategory === category.id ? 'selected' : ''
+                    selectedCategory === category.id ? "selected" : ""
                   }`}
                   onClick={() => setSelectedCategory(category.id)}
                   style={{
-                    '--category-bg-color': category.bgColor,
-                    '--category-icon-color': category.iconColor,
-                    '--category-selected-border': category.selectedBorderColor
+                    "--category-bg-color": category.bgColor,
+                    "--category-icon-color": category.iconColor,
+                    "--category-selected-border": category.selectedBorderColor,
                   }}
                 >
-                  <div className="category-icon" style={{ backgroundColor: category.bgColor }}>
+                  <div
+                    className="category-icon"
+                    style={{ backgroundColor: category.bgColor }}
+                  >
                     <div style={{ color: category.iconColor }}>
                       {renderCategoryIcon(category.icon)}
                     </div>
@@ -208,94 +245,111 @@ const MainPage = () => {
                 <h2 className="section-title">세부 정보</h2>
               </div>
 
-              <form className="details-form" onSubmit={(e) => e.preventDefault()}>
-              <div className="form-group">
-                <label className="form-label">
-                  <span className="label-text">제목</span> <span className="required-asterisk">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="문서 제목을 입력하세요"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">
-                  <span className="label-text">키워드</span> <span className="label-hint">(최대 5개)</span>
-                </label>
-                <div className="keywords-input-wrapper">
+              <form
+                className="details-form"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <div className="form-group">
+                  <label className="form-label">
+                    <span className="label-text">제목</span>{" "}
+                    <span className="required-asterisk">*</span>
+                  </label>
                   <input
                     type="text"
-                    className="form-input keywords-input"
-                    placeholder="키워드 입력"
-                    value={keywordInput}
-                    onChange={(e) => setKeywordInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    disabled={keywords.length >= 5}
+                    className="form-input"
+                    placeholder="문서 제목을 입력하세요"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                   />
-                  <button
-                    type="button"
-                    className="add-keyword-btn"
-                    onClick={handleAddKeyword}
-                    disabled={keywords.length >= 5 || !keywordInput.trim()}
-                  >
-                    +
-                  </button>
                 </div>
-                {keywords.length > 0 && (
-                  <div className="keywords-list">
-                    {keywords.map((keyword, index) => (
-                      <span key={index} className="keyword-tag">
-                        {keyword}
-                        <span
-                          className="keyword-remove"
-                          onClick={() => handleRemoveKeyword(index)}
-                        >
-                          ×
-                        </span>
-                      </span>
-                    ))}
+
+                <div className="form-group">
+                  <label className="form-label">
+                    <span className="label-text">키워드</span>{" "}
+                    <span className="label-hint">(최대 5개)</span>
+                  </label>
+                  <div className="keywords-input-wrapper">
+                    <input
+                      type="text"
+                      className="form-input keywords-input"
+                      placeholder="키워드 입력"
+                      value={keywordInput}
+                      onChange={(e) => setKeywordInput(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      disabled={keywords.length >= 5}
+                    />
+                    <button
+                      type="button"
+                      className="add-keyword-btn"
+                      onClick={handleAddKeyword}
+                      disabled={keywords.length >= 5 || !keywordInput.trim()}
+                    >
+                      +
+                    </button>
                   </div>
-                )}
-              </div>
+                  {keywords.length > 0 && (
+                    <div className="keywords-list">
+                      {keywords.map((keyword, index) => (
+                        <span key={index} className="keyword-tag">
+                          {keyword}
+                          <span
+                            className="keyword-remove"
+                            onClick={() => handleRemoveKeyword(index)}
+                          >
+                            ×
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-              <div className="form-group">
-                <label className="form-label">
-                  <span className="label-text">주제 설명</span> <span className="label-hint">(선택)</span>
-                </label>
-                <textarea
-                  className="form-textarea"
-                  placeholder="작성할 내용에 대해 간단히 설명해주세요"
-                  value={topicDescription}
-                  onChange={(e) => setTopicDescription(e.target.value)}
-                  rows="4"
-                />
-              </div>
+                <div className="form-group">
+                  <label className="form-label">
+                    <span className="label-text">주제 설명</span>{" "}
+                    <span className="label-hint">(선택)</span>
+                  </label>
+                  <textarea
+                    className="form-textarea"
+                    placeholder="작성할 내용에 대해 간단히 설명해주세요"
+                    value={topicDescription}
+                    onChange={(e) => setTopicDescription(e.target.value)}
+                    rows="4"
+                  />
+                </div>
 
-              <button
-                type="button"
-                className={`submit-button ${!selectedCategory ? 'disabled' : ''}`}
-                onClick={handleSubmit}
-                disabled={!selectedCategory}
-                style={selectedCategory ? {
-                  '--button-color': categories.find(cat => cat.id === selectedCategory)?.buttonColor || '#5C6BC0',
-                  '--button-hover-color': categories.find(cat => cat.id === selectedCategory)?.buttonHoverColor || '#3F51B5',
-                  backgroundColor: 'var(--button-color)'
-                } : {}}
-              >
-                작성 시작하기 <span className="arrow">→</span>
-              </button>
+                <button
+                  type="button"
+                  className={`submit-button ${
+                    !selectedCategory ? "disabled" : ""
+                  }`}
+                  onClick={handleSubmit}
+                  disabled={!selectedCategory}
+                  style={
+                    selectedCategory
+                      ? {
+                          "--button-color":
+                            categories.find(
+                              (cat) => cat.id === selectedCategory
+                            )?.buttonColor || "#5C6BC0",
+                          "--button-hover-color":
+                            categories.find(
+                              (cat) => cat.id === selectedCategory
+                            )?.buttonHoverColor || "#3F51B5",
+                          backgroundColor: "var(--button-color)",
+                        }
+                      : {}
+                  }
+                >
+                  작성 시작하기 <span className="arrow">→</span>
+                </button>
               </form>
             </div>
           </section>
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default MainPage
-
+export default MainPage;

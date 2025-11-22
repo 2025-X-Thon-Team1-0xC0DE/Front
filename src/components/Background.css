@@ -2,7 +2,7 @@
 .gradient-background {
   background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 30%, #e0f2fe 60%, #f0fdf4 100%);
   min-height: 100vh;
-  width: 100%;
+  width: 100;
 }
 
 /* body에 그라데이션 배경 적용 (MyPage에서 사용) */
