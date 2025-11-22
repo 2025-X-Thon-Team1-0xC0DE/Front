@@ -97,19 +97,19 @@ export const saveDocument = async (data) => {
       ? `${API_BASE_URL}/api/documents/${data.documentId}`
       : `${API_BASE_URL}/api/documents`;
 
-    const method = data.documentId ? "PUT" : "POST";
-
+    console.log("data.content", data.content);
     const response = await fetch(url, {
-      method,
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        title: data.title,
+        user_text: data.content,
         category: data.category,
         keywords: data.keywords,
         description: data.description,
-        content: data.content,
       }),
     });
 

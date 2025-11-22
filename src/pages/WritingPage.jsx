@@ -58,11 +58,6 @@ const WritingPage = () => {
       document.body.classList.remove("gradient-body");
     };
   }, []);
-<<<<<<< HEAD
-  const textareaRef = useRef(null);
-  const titleRef = useRef(null);
-=======
->>>>>>> origin/dev
 
   // docId가 있으면 API로 문서 조회
   useEffect(() => {
@@ -160,80 +155,26 @@ const WritingPage = () => {
   // 저장 + 최종 평가
   const handleSave = async () => {
     try {
-<<<<<<< HEAD
-      // contentEditable에서 현재 제목 가져오기
-      const currentTitleElement = titleRef.current;
-      let currentTitle = currentTitleElement?.textContent?.trim() || title;
-      
-      // '제목' 플레이스홀더인 경우 빈 문자열로 처리
-      if (currentTitle === '제목') {
-        currentTitle = '';
-      }
-      
-      // 1. 먼저 문서 저장
       const savedData = await saveDocument({
-        documentId: documentData?.documentId || null,
-        title: currentTitle,
-        category: documentData?.category || 'essay',
-        keywords: documentData?.keywords || [],
-        description: documentData?.description || '',
-        content: content,
-      });
-      
-      // 저장 성공 시 제목 state 업데이트
-      if (currentTitle !== title) {
-        setTitle(currentTitle || '제목');
-      }
-      
-      // 저장 성공 시 documentId 업데이트 (새로 생성된 문서인 경우)
-      if (savedData?.documentId && !documentData?.documentId) {
-        console.log('문서가 저장되었습니다. documentId:', savedData.documentId);
-      }
-      
-      // 2. 그 다음 최종 평가 요청
-      const evaluationData = await getFinalEvaluation({
-        documentId: documentData?.documentId || null,
-        title: currentTitle,
-        content: content,
-        category: documentData?.category || 'essay',
-=======
-      await saveDocument({
         documentId,
         title: title === "제목" ? "" : title,
         content,
         category,
+        keywords: [],
+        description: "",
       });
 
       setFeedbackType("sentence");
 
-      const evaluationData = await getFinalEvaluation({
-        documentId,
-        title: title === "제목" ? "" : title,
-        content,
-        category,
->>>>>>> origin/dev
-      });
-
       setFinalEvaluation(
-        evaluationData.evaluation || evaluationData.feedback || ""
+        savedData.data.eval || ""
       );
       setShowFinalEvaluation(true);
-<<<<<<< HEAD
-      
-      // 피드백 타입을 'sentence'로 설정
-      setFeedbackType('sentence');
-      
-      alert('저장되었습니다.');
-    } catch (error) {
-      console.error('저장 오류:', error);
-      alert('저장에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
-=======
 
       alert("저장되었습니다.");
     } catch (error) {
       console.error("저장 오류:", error);
       alert("저장에 실패했습니다.");
->>>>>>> origin/dev
     }
   };
 
@@ -263,30 +204,6 @@ const WritingPage = () => {
             >
               {title}
             </div>
-<<<<<<< HEAD
-          <div
-            ref={titleRef}
-            className="title-input"
-            contentEditable
-            suppressContentEditableWarning
-            onFocus={handleTitleFocus}
-            onBlur={handleTitleBlur}
-            data-placeholder="제목"
-          >
-            {title}
-          </div>
-          <textarea
-            ref={textareaRef}
-            className="content-input"
-            value={content}
-            onChange={handleContentChange}
-            onKeyDown={handleContentKeyDown}
-            placeholder=""
-          />
-          <div className="word-count">{wordCount} words</div>
-        </div>
-=======
->>>>>>> origin/dev
 
             <textarea
               ref={textareaRef}
