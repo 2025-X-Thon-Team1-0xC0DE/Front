@@ -86,3 +86,78 @@ export const getMyDocuments = async () => {
   }
 };
 
+/**
+ * 글 저장 요청
+ * @param {Object} data - 저장할 글 데이터
+ * @param {string} data.documentId - 문서 ID (기존 문서인 경우)
+ * @param {string} data.title - 제목
+ * @param {string} data.content - 내용
+ * @param {string} data.category - 카테고리
+ * @returns {Promise<Object>} - 저장 응답
+ */
+export const saveDocument = async (data) => {
+  try {
+    const url = data.documentId 
+      ? `${API_BASE_URL}/api/writing/${data.documentId}`
+      : `${API_BASE_URL}/api/writing`;
+    
+    const method = data.documentId ? 'PUT' : 'POST';
+    
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: data.title,
+        content: data.content,
+        category: data.category,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('글 저장 실패');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('글 저장 오류:', error);
+    throw error;
+  }
+};
+
+/**
+ * 최종 평가 요청
+ * @param {Object} data - 평가 요청 데이터
+ * @param {string} data.documentId - 문서 ID
+ * @param {string} data.title - 제목
+ * @param {string} data.content - 내용
+ * @param {string} data.category - 카테고리
+ * @returns {Promise<Object>} - 최종 평가 응답
+ */
+export const getFinalEvaluation = async (data) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/writing/final-evaluation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        documentId: data.documentId,
+        title: data.title,
+        content: data.content,
+        category: data.category,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('최종 평가 요청 실패');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('최종 평가 요청 오류:', error);
+    throw error;
+  }
+};
+
