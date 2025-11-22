@@ -1,40 +1,57 @@
 .app-container {
   background-color: #ffffff;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 60px 40px 80px 40px;
+  padding: 30px 40px;
+  width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .page-title {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .page-title h1 {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .page-title p {
-  font-size: 16px;
+  font-size: 15px;
   color: #666;
 }
 
 .content-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  margin-top: 60px;
+  gap: 30px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .category-section {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  height: 100;
 }
 
 .section-title {
@@ -42,12 +59,16 @@
   font-weight: 600;
   color: #333;
   margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .category-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  flex: 1;
+  align-content: start;
+  min-height: 0;
 }
 
 .category-card {
@@ -113,6 +134,9 @@
 .details-section {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .details-container {
@@ -120,6 +144,10 @@
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .details-header {
@@ -127,6 +155,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .sparkle-icon {
@@ -151,6 +180,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  flex: 1;
+  min-height: 0;
 }
 
 .form-group {
@@ -182,6 +213,8 @@
   font-size: 14px;
   transition: border-color 0.3s ease;
   text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-input::placeholder {
@@ -203,6 +236,8 @@
   font-family: inherit;
   transition: border-color 0.3s ease;
   text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-textarea::placeholder {
@@ -217,10 +252,12 @@
 .keywords-input-wrapper {
   display: flex;
   gap: 8px;
+  width: 100%;
 }
 
 .keywords-input {
   flex: 1;
+  width: 100%;
 }
 
 .add-keyword-btn {
