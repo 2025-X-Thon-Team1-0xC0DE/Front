@@ -1,17 +1,21 @@
 // 글 작성 API 함수들
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
 /**
  * 새 글 작성 요청 (카테고리 선택 후)
  */
 export const createNewDocument = async (data) => {
   try {
+    const token = localStorage.getItem("access_token");
+    console.log("📌 createNewDocument token:", token);
+
     const response = await fetch(`${API_BASE_URL}/api/documents`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         category: data.category, // 예: 'report'
@@ -37,12 +41,14 @@ export const createNewDocument = async (data) => {
  */
 export const getDocument = async (documentId) => {
   try {
+    const token = localStorage.getItem("access_token");
     const response = await fetch(
       `${API_BASE_URL}/api/documents/${documentId}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -58,15 +64,15 @@ export const getDocument = async (documentId) => {
   }
 };
 
-/**
- * 내가 작성한 글 목록 가져오기
- */
+// 글 목록 조회 (마이페이지)
 export const getMyDocuments = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/documents/my-documents`, {
+    const token = localStorage.getItem("access_token");
+    const response = await fetch(`${API_BASE_URL}/api/documents`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -86,6 +92,7 @@ export const getMyDocuments = async () => {
  */
 export const saveDocument = async (data) => {
   try {
+    const token = localStorage.getItem("access_token");
     const url = data.documentId
       ? `${API_BASE_URL}/api/documents/${data.documentId}`
       : `${API_BASE_URL}/api/documents`;
@@ -96,6 +103,7 @@ export const saveDocument = async (data) => {
       method,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         title: data.title,
@@ -120,12 +128,14 @@ export const saveDocument = async (data) => {
  */
 export const getFinalEvaluation = async (data) => {
   try {
+    const token = localStorage.getItem("access_token");
     const response = await fetch(
       `${API_BASE_URL}/api/documents/final-evaluation`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           documentId: data.documentId,

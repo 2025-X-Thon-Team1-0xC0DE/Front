@@ -22,7 +22,7 @@ const MainPage = () => {
 
   const categories = [
     {
-      id: "resume",
+      id: "RESUME",
       title: "Resume",
       description: "경력과 역량을 효과적으로 전달하세요",
       icon: "briefcase",
@@ -33,7 +33,7 @@ const MainPage = () => {
       buttonHoverColor: "#3F51B5",
     },
     {
-      id: "report",
+      id: "REPORT",
       title: "Report",
       description: "체계적인 보고서를 작성하세요",
       icon: "document",
@@ -44,7 +44,7 @@ const MainPage = () => {
       buttonHoverColor: "#2E7D32",
     },
     {
-      id: "essay",
+      id: "ESSAY",
       title: "Essay",
       description: "논리적인 에세이를 완성하세요",
       icon: "graduation",
@@ -55,8 +55,8 @@ const MainPage = () => {
       buttonHoverColor: "#BF360C",
     },
     {
-      id: "cover-letter",
-      title: "Cover Letter",
+      id: "COVER_LETTER",
+      title: "Cover_letter",
       description: "인상적인 자기소개서를 만드세요",
       icon: "envelope",
       bgColor: "#FCE4EC",
@@ -172,12 +172,10 @@ const MainPage = () => {
         topicDescription,
       });
 
+      console.log("createResponse", createResponse);
+
       // 2) 응답에서 doc_id 추출
-      const createResponseData = createResponse.data || createResponse;
-      const documentId =
-        createResponseData.doc_id ||
-        createResponseData.documentId ||
-        createResponseData.id;
+      const documentId = createResponse.data || createResponse;
 
       if (!documentId) {
         throw new Error("문서 ID를 받지 못했습니다.");
