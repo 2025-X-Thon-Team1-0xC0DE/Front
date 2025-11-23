@@ -12,10 +12,10 @@ const MyPage = () => {
 
   // 그라데이션 배경 유지
   useEffect(() => {
-    document.body.classList.add('gradient-body', 'my-page-body');
-    
+    document.body.classList.add("gradient-body", "my-page-body");
+
     return () => {
-      document.body.classList.remove('gradient-body', 'my-page-body');
+      document.body.classList.remove("gradient-body", "my-page-body");
     };
   }, []);
 
@@ -106,9 +106,11 @@ const MyPage = () => {
           <p>카테고리별로 분류된 글 목록입니다</p>
         </div>
 
-        <div className="documents-container">
+         <div className="documents-container">
           {categories.map((category) => {
             const categoryDocuments = getDocumentsByCategory(category.id);
+            // ⬇ 카테고리별로 화면에 보여줄 문서를 2개로 제한
+            const visibleDocuments = categoryDocuments.slice(0, 2);
 
             return (
               <section key={category.id} className="category-section">
@@ -118,6 +120,7 @@ const MyPage = () => {
                     style={{ backgroundColor: category.color }}
                   ></div>
                   <h2 className="category-title">{category.title}</h2>
+                  {/* 전체 개수는 그대로 보여주고 싶으면 이대로 둠 */}
                   <span className="document-count">
                     ({categoryDocuments.length})
                   </span>
@@ -125,7 +128,7 @@ const MyPage = () => {
 
                 {categoryDocuments.length > 0 ? (
                   <div className="documents-list">
-                    {categoryDocuments.map((doc) => (
+                    {visibleDocuments.map((doc) => (
                       <div
                         key={doc.id}
                         className="document-item"
