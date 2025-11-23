@@ -1,5 +1,6 @@
 # 🎨 gAIde Frontend Architecture
 <br>
+
 ## React Component-Based Design System
 
 > **핵심 철학**: "재사용 가능한 컴포넌트를 통해 일관성 있고 확장 가능한 UI를 구축"
