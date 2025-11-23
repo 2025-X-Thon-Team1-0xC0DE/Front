@@ -303,13 +303,13 @@ const WritingPage = () => {
                 {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
               </button>
             </div> */}
-              <button
-                className="feedback-request-button"
-                onClick={handleRequestFeedback}
-                disabled={isLoadingFeedback || !content.trim()}
-              >
-                {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
-              </button>
+            <button
+              className="feedback-request-button"
+              onClick={handleRequestFeedback}
+              disabled={isLoadingFeedback || !content.trim()}
+            >
+              {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
+            </button>
           </div>
 
           {/* Right - 피드백 영역 */}
@@ -411,10 +411,10 @@ const WritingPage = () => {
                       {structureFeedback.map((text, index) => (
                         <div key={index} className="structure-section">
                           <div className="structure-section-title">
-                          #{index + 1}
+                            #{index + 1}
                           </div>
                           <div className="structure-section-feedback">
-                            • {text}
+                            {text}
                           </div>
                         </div>
                       ))}
