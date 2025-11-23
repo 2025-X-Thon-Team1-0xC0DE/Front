@@ -14,37 +14,8 @@ import MyPage from "./pages/MyPage.jsx";
 
 function AppContent() {
   const location = useLocation();
-  const showHeader = location.pathname !== '/' && location.pathname !== '/signup';
-  const isWritingPage = location.pathname === '/writing';
-  const isMyPage = location.pathname === '/mypage';
-
-  return (
-    <>
-      {showHeader && !isWritingPage && !isMyPage && <Header />}
-      {isWritingPage && (
-        <div className="writing-page-wrapper">
-          <Header />
-          <WritingPage />
-        </div>
-      )}
-      {isMyPage && (
-        <div className="my-page-wrapper">
-          <Header />
-          <MyPage />
-        </div>
-      )}
-      {!isWritingPage && !isMyPage && (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/main" element={<MainPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-        </Routes>
-      )}
-      {isWritingPage && <Routes><Route path="/writing" element={null} /></Routes>}
   const showHeader =
     location.pathname !== "/" && location.pathname !== "/signup";
-
   return (
     <>
       {showHeader && <Header />}

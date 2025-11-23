@@ -272,10 +272,10 @@
   padding: 24px 24px 12px 24px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
   border-left: 1px solid #e0e0e0;
   min-height: 0;
 }
+
 
 .feedback-header {
   display: flex;
@@ -334,12 +334,16 @@
 
 /* Feedback Content */
 .feedback-content {
-  flex: 1;
+  flex: 1 1 auto;          /* 남는 공간 채우기 */
   background-color: #ffffff;
   border-radius: 8px;
   padding: 20px;
-  min-height: 200px;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;        /* ✅ 이 영역만 세로 스크롤 */
+  padding-bottom: 80px;    /* ✅ 저장 버튼 높이만큼 여유 (겹치지 않게) */
 }
+
 
 .empty-feedback {
   display: flex;
@@ -489,9 +493,12 @@
 
 /* Save Button Container */
 .save-button-container {
-  margin-top: auto;
+  margin-top: 12px;
   padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+  flex-shrink: 0;          /* 버튼 영역이 줄어들지 않도록 */
 }
+
 
 .save-button {
   width: 100%;
