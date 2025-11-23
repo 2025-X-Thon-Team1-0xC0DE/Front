@@ -55,11 +55,7 @@ const WritingPage = () => {
   const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
 
   // ✅ 구조 피드백: 배열로 초기화 (map 사용)
-  const [structureFeedback, setStructureFeedback] = useState({
-    introduction: [],
-    body: [],
-    conclusion: [],
-  });
+  const [structureFeedback, setStructureFeedback] = useState([]);
 
   const [finalEvaluation, setFinalEvaluation] = useState("");
   const [showFinalEvaluation, setShowFinalEvaluation] = useState(false);
@@ -167,73 +163,67 @@ const WritingPage = () => {
 
   // ✅ 피드백 요청 핸들러 (문장 피드백)
   const handleRequestFeedback = async () => {
-  if (!content.trim()) {
-    alert("피드백을 받을 내용이 없습니다.");
-    return;
-  }
-
-  if (!documentId) {
-    alert("먼저 글을 저장한 뒤 피드백을 요청해 주세요.");
-    return;
-  }
-
-  setIsLoadingFeedback(true);
-
-  try {
-    // 🔹 현재 탭에 따라 request_type 결정
-    const requestType = feedbackType === "sentence" ? 1 : 0;
-
-    const res = await requestSentenceFeedback({
-      doc_id: documentId,
-      category: (category || "ESSAY").toUpperCase(), // REPORT / ESSAY / COVER_LETTER ...
-      keywords,
-      description: stateData.description || stateData.topicDescription || "",
-      request_type: requestType,
-      user_text: content,
-    });
-
-    // 🔹 ResponseDTO 검사
-    if (!res?.success) {
-      throw new Error(res?.error || "피드백 요청 실패");
+    if (!content.trim()) {
+      alert("피드백을 받을 내용이 없습니다.");
+      return;
     }
 
-    const payload = res.data || {};
-    let feedbackList = payload.feedback || [];
-
-    // 문자열로 올 가능성까지 방어
-    if (!Array.isArray(feedbackList)) {
-      if (typeof feedbackList === "string") {
-        feedbackList = feedbackList
-          .split("\n")
-          .map(s => s.trim())
-          .filter(Boolean);
-      } else {
-        feedbackList = [];
-      }
+    if (!documentId) {
+      alert("먼저 글을 저장한 뒤 피드백을 요청해 주세요.");
+      return;
     }
 
-    // 🔹 선택된 탭에 따라 상태에 넣기
-    if (feedbackType === "sentence") {
-      setSentenceFeedback(feedbackList);
-    } else {
-      setStructureFeedback({
-        introduction: feedbackList,
-        body: [],
-        conclusion: [],
+    setIsLoadingFeedback(true);
+
+    try {
+      // 🔹 현재 탭에 따라 request_type 결정
+      const requestType = feedbackType === "sentence" ? 1 : 0;
+
+      const res = await requestSentenceFeedback({
+        doc_id: documentId,
+        category: (category || "ESSAY").toUpperCase(), // REPORT / ESSAY / COVER_LETTER ...
+        keywords,
+        description: stateData.description || stateData.topicDescription || "",
+        request_type: requestType,
+        user_text: content,
       });
+
+      // 🔹 ResponseDTO 검사
+      if (!res?.success) {
+        throw new Error(res?.error || "피드백 요청 실패");
+      }
+
+      const payload = res.data || {};
+      let feedbackList = payload.feedback || [];
+
+      // 문자열로 올 가능성까지 방어
+      if (!Array.isArray(feedbackList)) {
+        if (typeof feedbackList === "string") {
+          feedbackList = feedbackList
+            .split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean);
+        } else {
+          feedbackList = [];
+        }
+      }
+
+      // 🔹 선택된 탭에 따라 상태에 넣기
+      if (feedbackType === "sentence") {
+        setSentenceFeedback(feedbackList);
+      } else {
+        setStructureFeedback(feedbackList);
+      }
+
+      setShowFinalEvaluation(false);
+    } catch (error) {
+      console.error("피드백 요청 오류:", error);
+      alert("피드백 요청에 실패했습니다.");
+      setSentenceFeedback([]);
+    } finally {
+      setIsLoadingFeedback(false);
     }
-
-    setShowFinalEvaluation(false);
-  } catch (error) {
-    console.error("피드백 요청 오류:", error);
-    alert("피드백 요청에 실패했습니다.");
-    setSentenceFeedback([]);
-  } finally {
-    setIsLoadingFeedback(false);
-  }
-};
-
-
+  };
 
   // 저장 + 최종 평가
   const handleSave = async () => {
@@ -304,7 +294,7 @@ const WritingPage = () => {
             <div className="word-count">{wordCount} words</div>
 
             {/* ✅ 피드백 요청 버튼 */}
-            <div className="feedback-request-container">
+            {/* <div className="feedback-request-container">
               <button
                 className="feedback-request-button"
                 onClick={handleRequestFeedback}
@@ -312,7 +302,14 @@ const WritingPage = () => {
               >
                 {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
               </button>
-            </div>
+            </div> */}
+              <button
+                className="feedback-request-button"
+                onClick={handleRequestFeedback}
+                disabled={isLoadingFeedback || !content.trim()}
+              >
+                {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
+              </button>
           </div>
 
           {/* Right - 피드백 영역 */}
@@ -351,7 +348,7 @@ const WritingPage = () => {
                 }`}
                 onClick={() => handleFeedbackTypeChange("structure")}
               >
-                글의 구조
+                개요
               </button>
             </div>
 
@@ -367,10 +364,10 @@ const WritingPage = () => {
                 <div className="sentence-feedback">
                   {content.trim() && lastSentenceInfo ? (
                     <div>
-                      <div className="feedback-label">최근 문장:</div>
+                      {/* <div className="feedback-label">최근 문장:</div>
                       <div className="feedback-sentence">
                         "{getLastSentenceText()}"
-                      </div>
+                      </div> */}
                       <div className="feedback-label">개선 제안:</div>
 
                       {sentenceFeedback.length > 0 ? (
@@ -411,32 +408,16 @@ const WritingPage = () => {
                 <div className="structure-feedback">
                   {content.trim() && (
                     <div className="structure-sections">
-                      {/* 서론 */}
-                      <div className="structure-section">
-                        <div className="structure-section-feedback">
-                          {structureFeedback.introduction?.map((text, idx) => (
-                            <div key={idx}>• {text}</div>
-                          ))}
+                      {structureFeedback.map((text, index) => (
+                        <div key={index} className="structure-section">
+                          <div className="structure-section-title">
+                          #{index + 1}
+                          </div>
+                          <div className="structure-section-feedback">
+                            • {text}
+                          </div>
                         </div>
-                      </div>
-
-                      {/* 본론 */}
-                      <div className="structure-section">
-                        <div className="structure-section-feedback">
-                          {structureFeedback.body?.map((text, idx) => (
-                            <div key={idx}>• {text}</div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* 결론 */}
-                      <div className="structure-section">
-                        <div className="structure-section-feedback">
-                          {structureFeedback.conclusion?.map((text, idx) => (
-                            <div key={idx}>• {text}</div>
-                          ))}
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   )}
                 </div>

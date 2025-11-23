@@ -159,6 +159,7 @@ body.gradient-body #root {
   display: flex;
   flex: 1;
   overflow: hidden;
+  align-items: stretch;
 }
 
 /* Category Display */
@@ -176,11 +177,12 @@ body.gradient-body #root {
 .writing-area {
   flex: 2;
   background-color: #ffffff;
-  padding: 40px 40px 80px 40px;
+  padding: 40px 40px 24px 40px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: calc(100vh - 80px - 64px - 100px);
+  /* height: calc(100vh - 80px - 64px - 100px); */
+  min-height: 0;
 }
 
 .title-input {
@@ -265,6 +267,7 @@ body.gradient-body #root {
   flex-direction: column;
   overflow-y: auto;
   border-left: 1px solid #e0e0e0;
+  min-height: 0;
 }
 
 .feedback-header {

@@ -142,16 +142,18 @@ export const requestSentenceFeedback = async (data) => {
         },
         // ✅ RequestDTO 그대로 보내기
         body: JSON.stringify({
-          category: data.category,        // "REPORT" / "COVER_LETTER" ...
-          keywords: data.keywords,        // ["매출 증대", ...]
-          description: data.description,  // 글 설명
+          category: data.category, // "REPORT" / "COVER_LETTER" ...
+          keywords: data.keywords, // ["매출 증대", ...]
+          description: data.description, // 글 설명
           request_type: data.request_type, // 1: 피드백, 0: 글의 구조
-          user_text: data.user_text,      // 에디터 내용
+          user_text: data.user_text, // 에디터 내용
         }),
       }
     );
 
     const json = await response.json().catch(() => null);
+
+    console.log("📌 [백엔드 응답 JSON]", json);
 
     if (!response.ok) {
       // 상태 코드랑 응답도 같이 찍어보면 백엔드 디버깅에 도움됨
