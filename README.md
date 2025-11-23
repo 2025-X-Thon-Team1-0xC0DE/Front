@@ -3,7 +3,7 @@
 
 > **핵심 철학**: "재사용 가능한 컴포넌트를 통해 일관성 있고 확장 가능한 UI를 구축"
 
----
+
 
 ## 📐 아키텍처 개요 (Architecture Overview)
 
@@ -26,7 +26,7 @@ src/
 └── api/                # 백엔드 API 호출 함수
 ```
 
----
+
 
 ## 🧩 핵심 컴포넌트 분석 (Core Components)
 
@@ -54,7 +54,7 @@ src/
 document.body.classList.add('gradient-body', 'my-page-body');
 ```
 
----
+
 
 ### 2️⃣ **Header Component** - 네비게이션 & 사용자 정보
 ```
@@ -87,7 +87,7 @@ import Header from '../components/Header';
 <MainContent />
 ```
 
----
+
 
 ## 💡 주요 설계 원칙
 
@@ -106,7 +106,7 @@ import Header from '../components/Header';
 - Header + MyPageContent = MyPage
 - CategorySection + DocumentItem = DocumentsContainer
 
----
+
 
 ## 📦 기술 스택 (Frontend)
 
@@ -118,7 +118,7 @@ import Header from '../components/Header';
 | **상태관리** | useState/useEffect | 로컬 상태 관리 (복잡도 낮음) |
 | **비동기 처리** | async/await | API 호출 및 데이터 로드 |
 
----
+
 
 ## ✨ 최종 정리
 
