@@ -124,6 +124,50 @@ export const saveDocument = async (data) => {
 };
 
 /**
+ * 피드백 요청
+ */
+// 피드백 요청 API
+export const requestSentenceFeedback = async (data) => {
+  try {
+    const token = localStorage.getItem("access_token");
+
+    // ✅ 명세: PATCH /api/documents/{docId}/feedback
+    const response = await fetch(
+      `${API_BASE_URL}/api/documents/${data.doc_id}/feedback`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        // ✅ RequestDTO 그대로 보내기
+        body: JSON.stringify({
+          category: data.category,        // "REPORT" / "COVER_LETTER" ...
+          keywords: data.keywords,        // ["매출 증대", ...]
+          description: data.description,  // 글 설명
+          request_type: data.request_type, // 1: 피드백, 0: 글의 구조
+          user_text: data.user_text,      // 에디터 내용
+        }),
+      }
+    );
+
+    const json = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      // 상태 코드랑 응답도 같이 찍어보면 백엔드 디버깅에 도움됨
+      console.error("피드백 요청 실패:", response.status, json);
+      throw new Error(json?.error || "피드백 요청 실패");
+    }
+
+    // ✅ ResponseDTO: { success, data: { feedback, msg }, error }
+    return json;
+  } catch (error) {
+    console.error("피드백 오류:", error);
+    throw error;
+  }
+};
+
+/**
  * 최종 평가 요청
  */
 export const getFinalEvaluation = async (data) => {

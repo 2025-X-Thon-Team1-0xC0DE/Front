@@ -25,7 +25,7 @@ function AppContent() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/documents" element={<MainPage />} />
         <Route path="/documents/:docId" element={<WritingPage />} />
-        <Route path="/documents" element={<MyPage />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </>
   );
