@@ -233,12 +233,19 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-label {
   font-size: 14px;
   font-weight: 500;
   color: #333;
+  width: 100%;
+  display: block;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .label-text {
@@ -251,11 +258,13 @@ body {
 }
 
 .form-input {
+  width: 100%;
   padding: 12px 16px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .form-input::placeholder {
@@ -268,6 +277,7 @@ body {
 }
 
 .form-textarea {
+  width: 100%;
   padding: 12px 16px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -276,6 +286,7 @@ body {
   resize: none;
   font-family: inherit;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .form-textarea::placeholder {
@@ -330,8 +341,8 @@ body {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background-color: #f3e5f5;
-  color: #9c27b0;
+  background-color: #e3f2fd;
+  color: #1976d2;
   border-radius: 20px;
   font-size: 12px;
 }
@@ -339,7 +350,7 @@ body {
 .keyword-remove {
   cursor: pointer;
   font-weight: bold;
-  color: #9c27b0;
+  color: #1976d2;
 }
 
 .submit-button {
