@@ -30,7 +30,6 @@ const MyPage = () => {
     loadDocuments();
   }, []);
 
-  /** 🔥 MyPage 데이터 불러오기 (토큰 포함) */
   const loadDocuments = async () => {
     try {
       setLoading(true);
@@ -53,6 +52,8 @@ const MyPage = () => {
           },
         }
       );
+
+      console.log("response", response);
 
       if (!response.ok) {
         throw new Error("문서 목록 조회 실패");

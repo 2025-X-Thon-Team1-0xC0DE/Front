@@ -5,7 +5,12 @@ import './WritingPage.css';
 import '../components/Background.css';
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { saveDocument, getFinalEvaluation, getDocument } from "../api/writing";
+import {
+  saveDocument,
+  getFinalEvaluation,
+  getDocument,
+  requestSentenceFeedback, // ✅ 추가
+} from "../api/writing";
 import "./WritingPage.css";
 import "../components/Background.css";
 
@@ -28,22 +33,13 @@ const WritingPage = () => {
   const [title, setTitle] = useState(stateData.title || "제목");
   const [content, setContent] = useState(stateData.content || "");
 
+  // ✅ 키워드(있으면 사용, 없으면 빈 배열)
+  const [keywords, setKeywords] = useState(stateData.keywords || []);
+
   // 카테고리 이름 매핑
   const getCategoryName = (categoryId) => {
     const categoryMap = {
-      'resume': 'Resume',
-      'report': 'Report',
-      'essay': 'Essay',
-      'cover-letter': 'Cover Letter'
-    }
-    return categoryMap[categoryId] || 'Essay'
-  }
-  
-  const documentType = getCategoryName(documentData?.category);
-  const [feedbackType, setFeedbackType] = useState('sentence'); // 'sentence' or 'structure'
-  const [sentenceFeedback, setSentenceFeedback] = useState([]); // 피드백 배열로 변경
-  const [isLoadingFeedback, setIsLoadingFeedback] = useState(false); // 피드백 로딩 상태
-      resume: "Resume",
+      resume: "RESUME",
       RESUME: "Resume",
       report: "Report",
       REPORT: "Report",
@@ -58,12 +54,14 @@ const WritingPage = () => {
   const documentType = getCategoryName(category);
 
   const [feedbackType, setFeedbackType] = useState("sentence"); // 'sentence' or 'structure'
-  const [sentenceFeedback, setSentenceFeedback] = useState("");
-  const [structureFeedback, setStructureFeedback] = useState({
-    introduction: "",
-    body: "",
-    conclusion: "",
-  });
+
+  // ✅ 문장 피드백: 배열 + 로딩 상태
+  const [sentenceFeedback, setSentenceFeedback] = useState([]);
+  const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
+
+  // ✅ 구조 피드백: 배열로 초기화 (map 사용)
+  const [structureFeedback, setStructureFeedback] = useState([]);
+
   const [finalEvaluation, setFinalEvaluation] = useState("");
   const [showFinalEvaluation, setShowFinalEvaluation] = useState(false);
   const [wordCount, setWordCount] = useState(0);
@@ -86,7 +84,6 @@ const WritingPage = () => {
         setError(null);
         const res = await getDocument(docId);
 
-        // 응답 구조 정리 (success / data 감싸는 형태 고려)
         const payload = res.data || res;
         setTitle(payload.title || "제목");
         setContent(payload.content || "");
@@ -205,6 +202,70 @@ const WritingPage = () => {
     setTitle(e.target.textContent);
   };
 
+  // ✅ 피드백 요청 핸들러 (문장 피드백)
+  const handleRequestFeedback = async () => {
+    if (!content.trim()) {
+      alert("피드백을 받을 내용이 없습니다.");
+      return;
+    }
+
+    if (!documentId) {
+      alert("먼저 글을 저장한 뒤 피드백을 요청해 주세요.");
+      return;
+    }
+
+    setIsLoadingFeedback(true);
+
+    try {
+      // 🔹 현재 탭에 따라 request_type 결정
+      const requestType = feedbackType === "sentence" ? 1 : 0;
+
+      const res = await requestSentenceFeedback({
+        doc_id: documentId,
+        category: (category || "ESSAY").toUpperCase(), // REPORT / ESSAY / COVER_LETTER ...
+        keywords,
+        description: stateData.description || stateData.topicDescription || "",
+        request_type: requestType,
+        user_text: content,
+      });
+
+      // 🔹 ResponseDTO 검사
+      if (!res?.success) {
+        throw new Error(res?.error || "피드백 요청 실패");
+      }
+
+      const payload = res.data || {};
+      let feedbackList = payload.feedback || [];
+
+      // 문자열로 올 가능성까지 방어
+      if (!Array.isArray(feedbackList)) {
+        if (typeof feedbackList === "string") {
+          feedbackList = feedbackList
+            .split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean);
+        } else {
+          feedbackList = [];
+        }
+      }
+
+      // 🔹 선택된 탭에 따라 상태에 넣기
+      if (feedbackType === "sentence") {
+        setSentenceFeedback(feedbackList);
+      } else {
+        setStructureFeedback(feedbackList);
+      }
+
+      setShowFinalEvaluation(false);
+    } catch (error) {
+      console.error("피드백 요청 오류:", error);
+      alert("피드백 요청에 실패했습니다.");
+      setSentenceFeedback([]);
+    } finally {
+      setIsLoadingFeedback(false);
+    }
+  };
+
   // 저장 + 최종 평가
   const handleSave = async () => {
     try {
@@ -267,6 +328,24 @@ const WritingPage = () => {
               placeholder=""
             />
             <div className="word-count">{wordCount} words</div>
+
+            {/* ✅ 피드백 요청 버튼 */}
+            {/* <div className="feedback-request-container">
+              <button
+                className="feedback-request-button"
+                onClick={handleRequestFeedback}
+                disabled={isLoadingFeedback || !content.trim()}
+              >
+                {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
+              </button>
+            </div> */}
+            <button
+              className="feedback-request-button"
+              onClick={handleRequestFeedback}
+              disabled={isLoadingFeedback || !content.trim()}
+            >
+              {isLoadingFeedback ? "피드백 요청 중..." : "피드백 요청"}
+            </button>
           </div>
           <textarea
             ref={textareaRef}
@@ -325,7 +404,7 @@ const WritingPage = () => {
                 }`}
                 onClick={() => handleFeedbackTypeChange("structure")}
               >
-                글의 구조
+                개요
               </button>
             </div>
 
@@ -383,15 +462,26 @@ const WritingPage = () => {
                 <div className="sentence-feedback">
                   {content.trim() && lastSentenceInfo ? (
                     <div>
-                      <div className="feedback-label">최근 문장:</div>
+                      {/* <div className="feedback-label">최근 문장:</div>
                       <div className="feedback-sentence">
                         "{getLastSentenceText()}"
-                      </div>
+                      </div> */}
                       <div className="feedback-label">개선 제안:</div>
-                      <div className="feedback-text">
-                        {sentenceFeedback ||
-                          "문장을 작성하면 AI가 개선 방향을 제안해드립니다."}
-                      </div>
+
+                      {sentenceFeedback.length > 0 ? (
+                        <ul className="feedback-list">
+                          {sentenceFeedback.map((item, index) => (
+                            <li key={index} className="feedback-item">
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div className="feedback-text">
+                          문장을 작성한 뒤 <b>피드백 요청</b> 버튼을 누르면 AI가
+                          개선 방향을 제안해드립니다.
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="empty-feedback">
@@ -407,55 +497,25 @@ const WritingPage = () => {
                         <path d="M9 21h6"></path>
                         <path d="M12 3a6 6 0 0 0-6 6c0 2.5 1.5 4.5 3 6l3 3 3-3c1.5-1.5 3-3.5 3-6a6 6 0 0 0-6-6z"></path>
                       </svg>
-                      <p>Write to receive feedback.</p>
-                      <p>AI insights will appear here as you write.</p>
+                      <p>피드백을 받고 싶은 내용을 작성한 후</p>
+                      <p>왼쪽의 &quot;피드백 요청&quot; 버튼을 눌러주세요.</p>
                     </div>
                   )}
                 </div>
               ) : (
                 <div className="structure-feedback">
-                  {content.trim() ? (
+                  {content.trim() && (
                     <div className="structure-sections">
-                      <div className="structure-section">
-                        <div className="structure-section-title">서론</div>
-                        <div className="structure-section-feedback">
-                          {structureFeedback.introduction ||
-                            "서론에 대한 피드백이 여기에 표시됩니다."}
+                      {structureFeedback.map((text, index) => (
+                        <div key={index} className="structure-section">
+                          <div className="structure-section-title">
+                            #{index + 1}
+                          </div>
+                          <div className="structure-section-feedback">
+                            {text}
+                          </div>
                         </div>
-                      </div>
-
-                      <div className="structure-section">
-                        <div className="structure-section-title">본론</div>
-                        <div className="structure-section-feedback">
-                          {structureFeedback.body ||
-                            "본론에 대한 피드백이 여기에 표시됩니다."}
-                        </div>
-                      </div>
-
-                      <div className="structure-section">
-                        <div className="structure-section-title">결론</div>
-                        <div className="structure-section-feedback">
-                          {structureFeedback.conclusion ||
-                            "결론에 대한 피드백이 여기에 표시됩니다."}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="empty-feedback">
-                      <svg
-                        width="64"
-                        height="64"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1"
-                        className="lightbulb-icon"
-                      >
-                        <path d="M9 21h6"></path>
-                        <path d="M12 3a6 6 0 0 0-6 6c0 2.5 1.5 4.5 3 6l3 3 3-3c1.5-1.5 3-3.5 3-6a6 6 0 0 0-6-6z"></path>
-                      </svg>
-                      <p>Write to receive feedback.</p>
-                      <p>AI insights will appear here as you write.</p>
+                      ))}
                     </div>
                   )}
                 </div>
